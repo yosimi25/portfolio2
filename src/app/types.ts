@@ -35,6 +35,8 @@ export interface AgentConfig {
     (args: any, transcriptLogsFiltered: TranscriptItem[]) => Promise<any> | any
   >;
   downstreamAgents?: AgentConfig[] | { name: string; publicDescription: string }[];
+  inputType?: "voice" | "text";
+  outputType?: "voice" | "text";
 }
 
 export type AllAgentConfigsType = Record<string, AgentConfig[]>;
