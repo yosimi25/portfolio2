@@ -15,7 +15,7 @@ import { AgentConfig, SessionStatus } from "@/app/types";
 
 // Context providers & hooks
 // import { useTranscript } from "@/app/contexts/TranscriptContext";
-import { useEvent } from "@/app/contexts/EventContext";
+// import { useEvent } from "@/app/contexts/EventContext";
 // import { useHandleServerEvent } from "./hooks/useHandleServerEvent";
 
 // Utilities
