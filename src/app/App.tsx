@@ -39,7 +39,7 @@ function App() {
   // const query = searchParams.get('query');
 
   // const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } = useTranscript();
-  const { logClientEvent, /*logServerEvent*/ } = useEvent();
+  // const { logClientEvent, /*logServerEvent*/ } = useEvent();
 
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [selectedAgentConfigSet, setSelectedAgentConfigSet] = useState<AgentConfig[] | null>(null);
