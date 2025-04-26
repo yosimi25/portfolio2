@@ -19,7 +19,7 @@ import { useEvent } from "@/app/contexts/EventContext";
 import { useHandleServerEvent } from "./hooks/useHandleServerEvent";
 
 // Utilities
-import { createRealtimeConnection } from "./lib/realtimeConnection";
+// import { createRealtimeConnection } from "./lib/realtimeConnection";
 
 // Agent configs
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
@@ -36,17 +36,17 @@ const SearchComponent = () => {
 
 function App() {
   const searchParams = useSearchParams();
-  const query = searchParams.get('query');
+  // const query = searchParams.get('query');
 
-  const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } = useTranscript();
-  const { logClientEvent, logServerEvent } = useEvent();
+  // const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } = useTranscript();
+  const { logClientEvent, /*logServerEvent*/ } = useEvent();
 
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [selectedAgentConfigSet, setSelectedAgentConfigSet] = useState<AgentConfig[] | null>(null);
-  const [dataChannel, setDataChannel] = useState<RTCDataChannel | null>(null);
-  const pcRef = useRef<RTCPeerConnection | null>(null);
+  // const [dataChannel, setDataChannel] = useState<RTCDataChannel | null>(null);
+  // const pcRef = useRef<RTCPeerConnection | null>(null);
   const dcRef = useRef<RTCDataChannel | null>(null);
-  const audioElementRef = useRef<HTMLAudioElement | null>(null);
+  // const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const [sessionStatus, setSessionStatus] = useState<SessionStatus>("DISCONNECTED");
 
   const sendClientEvent = (eventObj: any, eventNameSuffix = "") => {
@@ -59,13 +59,13 @@ function App() {
     }
   };
 
-  const handleServerEventRef = useHandleServerEvent({
-    setSessionStatus,
-    selectedAgentName,
-    selectedAgentConfigSet,
-    sendClientEvent,
-    setSelectedAgentName,
-  });
+  // const handleServerEventRef = useHandleServerEvent({
+  //   setSessionStatus,
+  //   selectedAgentName,
+  //   selectedAgentConfigSet,
+  //   sendClientEvent,
+  //   setSelectedAgentName,
+  // });
 
   useEffect(() => {
     let finalAgentConfig = searchParams.get("agentConfig");
