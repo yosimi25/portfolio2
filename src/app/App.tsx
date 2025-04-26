@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from 'next/navigation';
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 // UI components
@@ -14,9 +14,9 @@ import BottomToolbar from "./components/BottomToolbar";
 import { AgentConfig, SessionStatus } from "@/app/types";
 
 // Context providers & hooks
-import { useTranscript } from "@/app/contexts/TranscriptContext";
+// import { useTranscript } from "@/app/contexts/TranscriptContext";
 import { useEvent } from "@/app/contexts/EventContext";
-import { useHandleServerEvent } from "./hooks/useHandleServerEvent";
+// import { useHandleServerEvent } from "./hooks/useHandleServerEvent";
 
 // Utilities
 // import { createRealtimeConnection } from "./lib/realtimeConnection";
@@ -47,17 +47,17 @@ function App() {
   // const pcRef = useRef<RTCPeerConnection | null>(null);
   const dcRef = useRef<RTCDataChannel | null>(null);
   // const audioElementRef = useRef<HTMLAudioElement | null>(null);
-  const [sessionStatus, setSessionStatus] = useState<SessionStatus>("DISCONNECTED");
+  const [sessionStatus, /*setSessionStatus*/] = useState<SessionStatus>("DISCONNECTED");
 
-  const sendClientEvent = (eventObj: any, eventNameSuffix = "") => {
-    if (dcRef.current && dcRef.current.readyState === "open") {
-      logClientEvent(eventObj, eventNameSuffix);
-      dcRef.current.send(JSON.stringify(eventObj));
-    } else {
-      logClientEvent({ attemptedEvent: eventObj.type }, "error.data_channel_not_open");
-      console.error("Failed to send message - no data channel available", eventObj);
-    }
-  };
+  // const sendClientEvent = (eventObj: any, eventNameSuffix = "") => {
+  //   if (dcRef.current && dcRef.current.readyState === "open") {
+  //     logClientEvent(eventObj, eventNameSuffix);
+  //     dcRef.current.send(JSON.stringify(eventObj));
+  //   } else {
+  //     logClientEvent({ attemptedEvent: eventObj.type }, "error.data_channel_not_open");
+  //     console.error("Failed to send message - no data channel available", eventObj);
+  //   }
+  // };
 
   // const handleServerEventRef = useHandleServerEvent({
   //   setSessionStatus,
