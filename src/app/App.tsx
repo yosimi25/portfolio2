@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
-// import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 
 // UI components
@@ -13,17 +12,10 @@ import BottomToolbar from "./components/BottomToolbar";
 // Types
 import { AgentConfig, SessionStatus } from "@/app/types";
 
-// Context providers & hooks
-// import { useTranscript } from "@/app/contexts/TranscriptContext";
-// import { useEvent } from "@/app/contexts/EventContext";
-// import { useHandleServerEvent } from "./hooks/useHandleServerEvent";
-
-// Utilities
-// import { createRealtimeConnection } from "./lib/realtimeConnection";
-
 // Agent configs
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
 
+// 🔹 SearchComponent（クライアント専用でクエリ取得）
 const SearchComponent = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get('query');
@@ -35,40 +27,15 @@ const SearchComponent = () => {
 };
 
 function App() {
-  const searchParams = useSearchParams();
-  // const query = searchParams.get('query');
-
-  // const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } = useTranscript();
-  // const { logClientEvent, /*logServerEvent*/ } = useEvent();
-
   const [selectedAgentName, setSelectedAgentName] = useState<string>("");
   const [selectedAgentConfigSet, setSelectedAgentConfigSet] = useState<AgentConfig[] | null>(null);
-  // const [dataChannel, setDataChannel] = useState<RTCDataChannel | null>(null);
-  // const pcRef = useRef<RTCPeerConnection | null>(null);
   const dcRef = useRef<RTCDataChannel | null>(null);
-  // const audioElementRef = useRef<HTMLAudioElement | null>(null);
-  const [sessionStatus, /*setSessionStatus*/] = useState<SessionStatus>("DISCONNECTED");
-
-  // const sendClientEvent = (eventObj: any, eventNameSuffix = "") => {
-  //   if (dcRef.current && dcRef.current.readyState === "open") {
-  //     logClientEvent(eventObj, eventNameSuffix);
-  //     dcRef.current.send(JSON.stringify(eventObj));
-  //   } else {
-  //     logClientEvent({ attemptedEvent: eventObj.type }, "error.data_channel_not_open");
-  //     console.error("Failed to send message - no data channel available", eventObj);
-  //   }
-  // };
-
-  // const handleServerEventRef = useHandleServerEvent({
-  //   setSessionStatus,
-  //   selectedAgentName,
-  //   selectedAgentConfigSet,
-  //   sendClientEvent,
-  //   setSelectedAgentName,
-  // });
+  const [sessionStatus] = useState<SessionStatus>("DISCONNECTED");
 
   useEffect(() => {
-    let finalAgentConfig = searchParams.get("agentConfig");
+    const urlParams = new URLSearchParams(window.location.search);
+    let finalAgentConfig = urlParams.get("agentConfig");
+
     if (!finalAgentConfig || !allAgentSets[finalAgentConfig]) {
       finalAgentConfig = defaultAgentSetKey;
       const url = new URL(window.location.toString());
@@ -82,14 +49,15 @@ function App() {
 
     setSelectedAgentName(agentKeyToUse);
     setSelectedAgentConfigSet(agents);
-  }, [searchParams]);
-
-  // その他のuseEffectやロジックをそのまま残して、Appコンポーネント内で適切に利用します。
+  }, []);
 
   return (
     <div className="text-base flex flex-col h-screen bg-gray-100 text-gray-800 relative">
-      <SearchComponent />
-      
+      {/* 🔥 Suspenseでラップ */}
+      <Suspense fallback={<div>Loading Query...</div>}>
+        <SearchComponent />
+      </Suspense>
+
       <div className="p-5 text-lg font-semibold flex justify-between items-center">
         <div className="flex items-center">
           <div onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>
@@ -105,6 +73,7 @@ function App() {
             Realtime API <span className="text-gray-500">Agents</span>
           </div>
         </div>
+
         <div className="flex items-center">
           <label className="flex items-center text-base gap-1 mr-2 font-medium">
             Scenario
@@ -127,7 +96,7 @@ function App() {
 
       <div className="flex flex-1 gap-2 px-2 overflow-hidden relative">
         <Transcript
-          userText={""}  // 他の状態管理を使うため、値はそのままで置いておく
+          userText=""
           setUserText={() => {}}
           onSendMessage={() => {}}
           canSend={sessionStatus === "CONNECTED" && dcRef.current?.readyState === "open"}
